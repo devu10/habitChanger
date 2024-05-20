@@ -1,3 +1,3 @@
-#Helps improve the habit
+# Helps improve the habit
 
-##Logs the hours and helps omit the bad habits
+## Logs the hours and helps omit the bad habits
