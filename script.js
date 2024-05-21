@@ -1,6 +1,6 @@
 let habitList = [];
 
-const svdHrElm = document.getElementById('svdHr');
+
 const hrPerWeek = 24 * 7;
 
 const formSubmit = (e) => {
@@ -77,6 +77,7 @@ const displayImproveList = () => {
   });
 
   improveElm.innerHTML = improveRow;
+  document.getElementById('svdHr').innerText = bList.reduce((acc,item)=> acc+item.hr,0);
 };
 
 const idGen = (length = 6) => {
