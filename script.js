@@ -16,13 +16,14 @@ const formSubmit = (e) => {
 };
 
 const displayHabitList = () => {
-  console.log(habitList);
+  // console.log(habitList);
   let habitRow = "";
   const habitElm = document.getElementById("habitList");
 
-  const gList = habitList.filter((item) => item.type === "g");
+  let gList = habitList.filter((item) => item.type === "g");
+  console.log(gList);
 
-  habitList.map((item, i) => {
+  gList.map((item, i) => {
     habitRow += ` <tr>
     <td>${i + 1}</td>
     <td>${item.habit}</td>
@@ -41,19 +42,20 @@ const displayHabitList = () => {
   habitElm.innerHTML = habitRow;
 };
 const displayImproveList = () => {
-  console.log(habitList);
-  let habitRow = "";
-  const habitElm = document.getElementById("improveList");
+  // console.log(habitList);
+  let improveRow = "";
+  const improveElm = document.getElementById("improveList");
 
-  const bList = habitList.filter((item) => item.type === "b");
+  let bList = habitList.filter((item) => item.type === "b");
+  console.log(bList);
 
-  habitList.map((item, i) => {
-    habitRow += ` <tr>
+  bList.map((item, i) => {
+    improveRow += ` <tr>
     <td>${i + 1}</td>
     <td>${item.habit}</td>
     <td>${item.hr}</td>
     <td class="text-end">
-    <button onClick="moveHabit('${item.id}','b')" class="btn btn-warning">
+    <button onClick="moveHabit('${item.id}','g')" class="btn btn-warning">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <button onclick="onDelete('${item.id}')" class="btn btn-danger">
@@ -63,7 +65,7 @@ const displayImproveList = () => {
   </tr>`;
   });
 
-  habitElm.innerHTML = habitRow;
+  improveElm.innerHTML = improveRow;
 };
 
 const idGen = (length = 6) => {
@@ -83,6 +85,7 @@ const onDelete = (id) => {
   if (window.confirm("Aye you sure to delte?")) {
     habitList = habitList.filter((item) => item.id !== id);
     displayHabitList();
+    displayImproveList();
   }
 };
 
@@ -94,5 +97,6 @@ const moveHabit = (id, type) => {
     return item;
   });
 
-  displayHabitList;
+  displayHabitList();
+  displayImproveList();
 };
