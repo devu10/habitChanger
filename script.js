@@ -1,9 +1,12 @@
 let habitList = [];
 
+const svdHrElm = document.getElementById('svdHr');
+const hrPerWeek = 24 * 7;
+
 const formSubmit = (e) => {
   const newForm = new FormData(e);
   const habit = newForm.get("habit");
-  const hr = newForm.get("hr");
+  const hr = +newForm.get("hr");
   const obj = {
     habit,
     hr,
@@ -11,7 +14,14 @@ const formSubmit = (e) => {
     type: "g",
   };
 
+  const currentHr = totalHr();
+
+  if(currentHr + hr > hrPerWeek){
+    return alert("total hr cannot exceed the total hrs ina week");
+  }
+
   habitList.push(obj);
+  
   displayHabitList();
 };
 
@@ -21,7 +31,7 @@ const displayHabitList = () => {
   const habitElm = document.getElementById("habitList");
 
   let gList = habitList.filter((item) => item.type === "g");
-  console.log(gList);
+  // console.log(gList);
 
   gList.map((item, i) => {
     habitRow += ` <tr>
@@ -40,6 +50,7 @@ const displayHabitList = () => {
   });
 
   habitElm.innerHTML = habitRow;
+  totalHr();
 };
 const displayImproveList = () => {
   // console.log(habitList);
@@ -47,7 +58,7 @@ const displayImproveList = () => {
   const improveElm = document.getElementById("improveList");
 
   let bList = habitList.filter((item) => item.type === "b");
-  console.log(bList);
+  // console.log(bList);
 
   bList.map((item, i) => {
     improveRow += ` <tr>
@@ -100,3 +111,12 @@ const moveHabit = (id, type) => {
   displayHabitList();
   displayImproveList();
 };
+
+const totalHr = ()=>{
+  const tothr = habitList.reduce((acc, item)=>{
+    return acc + item.hr;
+  },0);
+  document.getElementById('tlHr').innerText = tothr;
+
+  return tothr;
+}
