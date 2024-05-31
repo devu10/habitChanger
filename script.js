@@ -1,6 +1,5 @@
 let habitList = [];
 
-
 const hrPerWeek = 24 * 7;
 
 const formSubmit = (e) => {
@@ -16,12 +15,12 @@ const formSubmit = (e) => {
 
   const currentHr = totalHr();
 
-  if(currentHr + hr > hrPerWeek){
+  if (currentHr + hr > hrPerWeek) {
     return alert("total hr cannot exceed the total hrs ina week");
   }
 
   habitList.push(obj);
-  
+
   displayHabitList();
 };
 
@@ -77,7 +76,10 @@ const displayImproveList = () => {
   });
 
   improveElm.innerHTML = improveRow;
-  document.getElementById('svdHr').innerText = bList.reduce((acc,item)=> acc+item.hr,0);
+  document.getElementById("svdHr").innerText = bList.reduce(
+    (acc, item) => acc + item.hr,
+    0
+  );
 };
 
 const idGen = (length = 6) => {
@@ -113,11 +115,16 @@ const moveHabit = (id, type) => {
   displayImproveList();
 };
 
-const totalHr = ()=>{
-  const tothr = habitList.reduce((acc, item)=>{
+const totalHr = () => {
+  const tothr = habitList.reduce((acc, item) => {
     return acc + item.hr;
-  },0);
-  document.getElementById('tlHr').innerText = tothr;
+  }, 0);
+  document.getElementById("tlHr").innerText = tothr;
 
   return tothr;
-}
+};
+
+const clearForm = () => {
+  document.getElementById("habits").value = "";
+  document.getElementById("hrs").value = "";
+};
