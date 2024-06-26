@@ -6,6 +6,8 @@ const hrPerWeek = 24 * 7;
 
 function App() {
   const [tlHr, setTlHr] = useState("");
+  const [habitElm, setHabitElm] = useState("");
+  const [improveElm, setImproveElm] = "";
   let habitList = [];
   const formSubmit = (e) => {
     e.preventDefault();
@@ -52,69 +54,133 @@ function App() {
   const displayHabitList = () => {
     // console.log(habitList);
     let habitRow = "";
-    const habitElm = document.getElementById("habitList");
+    //const habitElm = document.getElementById("habitList");
 
     let gList = habitList.filter((item) => item.type === "g");
     // console.log(gList);
 
     gList.map((item, i) => {
-      habitRow += ` <tr>
+      habitRow += `<tr>
       <td>${i + 1}</td>
       <td>${item.habit}</td>
       <td>${item.hr}</td>
-      <td class="text-end">
-        <button onclick="onDelete('${item.id}')" class="btn btn-danger">
-          <i class="fa-solid fa-trash"></i>
+      <td className="text-end">
+        <button onClick={onDelete('${item.id}')} className="btn btn-danger">
+          <i className="fa-solid fa-trash"></i>
         </button>
-        <button onClick="moveHabit('${item.id}','b')" class="btn btn-success">
-          <i class="fa-solid fa-arrow-right"></i>
+        <button onClick={moveHabit('${
+          item.id
+        }','b')} className="btn btn-success">
+          <i className="fa-solid fa-arrow-right"></i>
         </button>
       </td>
     </tr>`;
     });
 
-    habitElm.innerHTML = habitRow;
+    //habitElm.innerHTML = habitRow;
+    setHabitElm(habitRow);
     totalHr();
+  };
+
+  const onDelete = (id) => {
+    if (window.confirm("Aye you sure to delte?")) {
+      habitList = habitList.filter((item) => item.id !== id);
+      displayHabitList();
+      displayImproveList();
+    }
+  };
+
+  const displayImproveList = () => {
+    // console.log(habitList);
+    let improveRow = "";
+    //const improveElm = document.getElementById("improveList");
+
+    let bList = habitList.filter((item) => item.type === "b");
+    // console.log(bList);
+
+    bList.map((item, i) => {
+      improveRow += `<tr>
+      <td>${i + 1}</td>
+      <td>${item.habit}</td>
+      <td>${item.hr}</td>
+      <td className="text-end">
+      <button onClick={moveHabit('${item.id}','g')} className="btn btn-warning">
+          <i className="fa-solid fa-arrow-left"></i>
+        </button>
+        <button onClick={onDelete('${item.id}')} className="btn btn-danger">
+          <i className="fa-solid fa-trash"></i>
+        </button>      
+      </td>
+    </tr>`;
+    });
+
+    //improveElm.innerHTML = improveRow;
+    setImproveElm(improveRow);
+    document.getElementById("svdHr").innerText = bList.reduce(
+      (acc, item) => acc + item.hr,
+      0
+    );
+  };
+
+  const moveHabit = (id, type) => {
+    habitList.map((item) => {
+      if (item.id === id) {
+        item.type = type;
+      }
+      return item;
+    });
+
+    displayHabitList();
+    displayImproveList();
+  };
+
+  const clearForm = () => {
+    document.getElementById("habits").value = "";
+    document.getElementById("hrs").value = "";
   };
   return (
     <>
-      <div class="wrapper pt-5">
+      <div className="wrapper pt-5">
         {/* <!-- title --> */}
-        <div class="container">
-          <h1 class="text-center">Habit List</h1>
+        <div className="container">
+          <h1 className="text-center">Habit List</h1>
           {/* <!-- form --> */}
           <form
-            onsubmit={formSubmit}
+            onSubmit={formSubmit}
             action=""
-            class="border p-5 rounded shadow-lg mt-5"
+            className="border p-5 rounded shadow-lg mt-5"
           >
-            <div class="row">
-              <div class="col-md-7">
+            <div className="row">
+              <div className="col-md-7">
                 <input
                   type="text"
                   id="habits"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Habit"
                   aria-label="First name"
                   name="habit"
                 />
               </div>
-              <div class="col-md-2">
+              <div className="col-md-2">
                 <input
                   id="hrs"
                   type="number"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Hour"
                   aria-label="Last name"
                   name="hr"
                   min="1"
                 />
               </div>
-              <div class="col-md-3 d-flex gap-2">
-                <button type="submit" class="btn btn-primary">
+              <div className="col-md-3 d-flex gap-2">
+                <button type="submit" className="btn btn-primary">
                   Add New Habit
                 </button>
-                <div type="clear" class="btn btn-primary" onclick="clearForm()">
+                <div
+                  type="clear"
+                  className="btn btn-primary"
+                  onClick={clearForm}
+                >
                   clear
                 </div>
               </div>
@@ -122,34 +188,34 @@ function App() {
           </form>
 
           {/* <!-- tables --> */}
-          <div class="row mt-5">
-            <div class="col-md text-center">
+          <div className="row mt-5">
+            <div className="col-md text-center">
               <h3>Habits</h3>
               <hr />
               {/* <!-- habit tables --> */}
-              <table class="table table-striped table-hover">
-                <tbody id="habitList"></tbody>
+              <table className="table table-striped table-hover">
+                <tbody id="habitList">{habitElm}</tbody>
               </table>
             </div>
-            <div class="col-md text-center">
+            <div className="col-md text-center">
               <h3>Habits to Improve</h3>
               <hr />
               {/* <!-- to improve habits tables --> */}
-              <table class="table table-striped table-hover">
-                <tbody id="improveList"></tbody>
+              <table className="table table-striped table-hover">
+                <tbody id="improveList">{improveElm}</tbody>
               </table>
-              <div class="alert alert-success">
+              <div className="alert alert-success">
                 You could have saved <span id="svdHr">0</span> hours
               </div>
             </div>
           </div>
           {/* <!-- displa --> */}
-          <div class="alert alert-success">
+          <div className="alert alert-success">
             The total hours allocated =<span id="tlHr">{tlHr || 0}</span>
           </div>
         </div>
       </div>
-      <footer class="bg-black text-center text-white">
+      <footer className="bg-black text-center text-white">
         &copy devudevu10@gmail.com
       </footer>
     </>
