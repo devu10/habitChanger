@@ -6,12 +6,12 @@ const hrPerWeek = 24 * 7;
 
 function App() {
   const [tlHr, setTlHr] = useState("");
-  const [habitElm, setHabitElm] = useState("");
-  const [improveElm, setImproveElm] = "";
-  let habitList = [];
+  const [habits, sethabits] = useState("");
+  const [hrs, sethrs] = useState("");
+  const [habitList, setHabitList] = useState([]);
   const formSubmit = (e) => {
     e.preventDefault();
-    const newForm = new FormData(e);
+    const newForm = new FormData(e.target);
     const habit = newForm.get("habit");
     const hr = +newForm.get("hr");
     const obj = {
@@ -27,9 +27,11 @@ function App() {
       return alert("total hr cannot exceed the total hrs ina week");
     }
 
-    habitList.push(obj);
+    //habitList.push(obj);
+    setHabitList((prev) => [...prev, obj]);
 
-    displayHabitList();
+    //displayHabitList();
+    clearForm();
   };
   const idGen = (length = 6) => {
     const str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXCVBNM123456789";
@@ -135,8 +137,8 @@ function App() {
   };
 
   const clearForm = () => {
-    document.getElementById("habits").value = "";
-    document.getElementById("hrs").value = "";
+    sethabits("");
+    sethrs("");
   };
   return (
     <>
@@ -147,28 +149,33 @@ function App() {
           {/* <!-- form --> */}
           <form
             onSubmit={formSubmit}
-            action=""
             className="border p-5 rounded shadow-lg mt-5"
           >
             <div className="row">
               <div className="col-md-7">
                 <input
                   type="text"
-                  id="habits"
                   className="form-control"
                   placeholder="Habit"
                   aria-label="First name"
                   name="habit"
+                  value={habits}
+                  onChange={(e) => {
+                    sethabits(e.target.value);
+                  }}
                 />
               </div>
               <div className="col-md-2">
                 <input
-                  id="hrs"
                   type="number"
                   className="form-control"
                   placeholder="Hour"
                   aria-label="Last name"
                   name="hr"
+                  value={hrs}
+                  onChange={(e) => {
+                    sethrs(e.target.value);
+                  }}
                   min="1"
                 />
               </div>
@@ -177,11 +184,13 @@ function App() {
                   Add New Habit
                 </button>
                 <div
-                  type="clear"
                   className="btn btn-primary"
-                  onClick={clearForm}
+                  onClick={() => {
+                    sethabits("");
+                    sethrs("");
+                  }}
                 >
-                  clear
+                  Clear
                 </div>
               </div>
             </div>
@@ -194,7 +203,7 @@ function App() {
               <hr />
               {/* <!-- habit tables --> */}
               <table className="table table-striped table-hover">
-                <tbody id="habitList">{habitElm}</tbody>
+                <tbody id="habitList">{}</tbody>
               </table>
             </div>
             <div className="col-md text-center">
@@ -202,7 +211,7 @@ function App() {
               <hr />
               {/* <!-- to improve habits tables --> */}
               <table className="table table-striped table-hover">
-                <tbody id="improveList">{improveElm}</tbody>
+                <tbody id="improveList">{}</tbody>
               </table>
               <div className="alert alert-success">
                 You could have saved <span id="svdHr">0</span> hours
