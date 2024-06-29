@@ -6,6 +6,7 @@ const hrPerWeek = 24 * 7;
 
 function App() {
   const [tlHr, setTlHr] = useState("");
+  const [svdHr, setSvdHr] = useState("");
   const [habits, sethabits] = useState("");
   const [hrs, sethrs] = useState("");
   const [habitList, setHabitList] = useState([]);
@@ -27,10 +28,13 @@ function App() {
       return alert("total hr cannot exceed the total hrs ina week");
     }
 
-    //habitList.push(obj);
-    setHabitList((prev) => [...prev, obj]);
+    setHabitList((prev) => {
+      const updatedList = [...prev, obj];
+      setTlHr(totalHr(updatedList));
+      calculateSavedHours(updatedList);
+      return updatedList;
+    });
 
-    //displayHabitList();
     clearForm();
   };
   const idGen = (length = 6) => {
@@ -50,90 +54,39 @@ function App() {
       return acc + item.hr;
     }, 0);
     setTlHr(tothr);
-
     return tothr;
   };
-  const displayHabitList = () => {
-    // console.log(habitList);
-    let habitRow = "";
-    //const habitElm = document.getElementById("habitList");
 
-    let gList = habitList.filter((item) => item.type === "g");
-    // console.log(gList);
-
-    gList.map((item, i) => {
-      habitRow += `<tr>
-      <td>${i + 1}</td>
-      <td>${item.habit}</td>
-      <td>${item.hr}</td>
-      <td className="text-end">
-        <button onClick={onDelete('${item.id}')} className="btn btn-danger">
-          <i className="fa-solid fa-trash"></i>
-        </button>
-        <button onClick={moveHabit('${
-          item.id
-        }','b')} className="btn btn-success">
-          <i className="fa-solid fa-arrow-right"></i>
-        </button>
-      </td>
-    </tr>`;
-    });
-
-    //habitElm.innerHTML = habitRow;
-    setHabitElm(habitRow);
-    totalHr();
+  const calculateSavedHours = () => {
+    const savedHours = habitList
+      .filter((item) => item.type === "b")
+      .reduce((acc, item) => acc + item.hr, 0);
+    setSvdHr(savedHours);
   };
 
   const onDelete = (id) => {
-    if (window.confirm("Aye you sure to delte?")) {
-      habitList = habitList.filter((item) => item.id !== id);
-      displayHabitList();
-      displayImproveList();
+    if (window.confirm("Are you sure you want to delete?")) {
+      setHabitList((prev) => {
+        const updatedList = prev.filter((item) => item.id !== id);
+        setTlHr(totalHr(updatedList));
+        calculateSavedHours(updatedList);
+        return updatedList;
+      });
     }
   };
 
-  const displayImproveList = () => {
-    // console.log(habitList);
-    let improveRow = "";
-    //const improveElm = document.getElementById("improveList");
-
-    let bList = habitList.filter((item) => item.type === "b");
-    // console.log(bList);
-
-    bList.map((item, i) => {
-      improveRow += `<tr>
-      <td>${i + 1}</td>
-      <td>${item.habit}</td>
-      <td>${item.hr}</td>
-      <td className="text-end">
-      <button onClick={moveHabit('${item.id}','g')} className="btn btn-warning">
-          <i className="fa-solid fa-arrow-left"></i>
-        </button>
-        <button onClick={onDelete('${item.id}')} className="btn btn-danger">
-          <i className="fa-solid fa-trash"></i>
-        </button>      
-      </td>
-    </tr>`;
-    });
-
-    //improveElm.innerHTML = improveRow;
-    setImproveElm(improveRow);
-    document.getElementById("svdHr").innerText = bList.reduce(
-      (acc, item) => acc + item.hr,
-      0
-    );
-  };
-
   const moveHabit = (id, type) => {
-    habitList.map((item) => {
-      if (item.id === id) {
-        item.type = type;
-      }
-      return item;
+    setHabitList((prev) => {
+      const updatedList = prev.map((item) => {
+        if (item.id === id) {
+          return { ...item, type };
+        }
+        return item;
+      });
+      setTlHr(totalHr(updatedList));
+      calculateSavedHours(updatedList);
+      return updatedList;
     });
-
-    displayHabitList();
-    displayImproveList();
   };
 
   const clearForm = () => {
@@ -203,7 +156,31 @@ function App() {
               <hr />
               {/* <!-- habit tables --> */}
               <table className="table table-striped table-hover">
-                <tbody id="habitList">{}</tbody>
+                <tbody>
+                  {habitList
+                    .filter((item) => item.type === "g")
+                    .map((item, i) => (
+                      <tr key={item.id}>
+                        <td>{i + 1}</td>
+                        <td>{item.habit}</td>
+                        <td>{item.hr}</td>
+                        <td className="text-end">
+                          <button
+                            onClick={() => onDelete(item.id)}
+                            className="btn btn-danger"
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
+                          <button
+                            onClick={() => moveHabit(item.id, "b")}
+                            className="btn btn-success"
+                          >
+                            <i className="fa-solid fa-arrow-right"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
               </table>
             </div>
             <div className="col-md text-center">
@@ -211,16 +188,40 @@ function App() {
               <hr />
               {/* <!-- to improve habits tables --> */}
               <table className="table table-striped table-hover">
-                <tbody id="improveList">{}</tbody>
+                <tbody>
+                  {habitList
+                    .filter((item) => item.type === "b")
+                    .map((item, i) => (
+                      <tr key={item.id}>
+                        <td>{i + 1}</td>
+                        <td>{item.habit}</td>
+                        <td>{item.hr}</td>
+                        <td className="text-end">
+                          <button
+                            onClick={() => moveHabit(item.id, "g")}
+                            className="btn btn-warning"
+                          >
+                            <i className="fa-solid fa-arrow-left"></i>
+                          </button>
+                          <button
+                            onClick={() => onDelete(item.id)}
+                            className="btn btn-danger"
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
               </table>
               <div className="alert alert-success">
-                You could have saved <span id="svdHr">0</span> hours
+                You could have saved <span id="svdHr">{svdHr}</span> hours
               </div>
             </div>
           </div>
           {/* <!-- displa --> */}
           <div className="alert alert-success">
-            The total hours allocated =<span id="tlHr">{tlHr || 0}</span>
+            The total hours allocated =<span id="tlHr">{tlHr}</span>
           </div>
         </div>
       </div>
