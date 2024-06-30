@@ -1,7 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
+import { Form } from "./components/Form";
 
 function App() {
+  const [taskList, setTaskList] = useState([]);
+  const addTaskList = (taskObj) => {
+    const obj = {
+      ...taskObj,
+      id: idGen(),
+      type: "entry",
+    };
+    setTaskList([...taskList, obj]);
+  };
+  console.log(taskList);
+  const idGen = (length = 6) => {
+    const str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXCVBNM123456789";
+
+    let id = "";
+
+    for (let i = 0; i < 6; i++) {
+      const index = Math.floor(Math.random() * str.length);
+      id += str[index];
+    }
+
+    return id;
+  };
   return (
     <>
       <div className="wrapper pt-5">
@@ -9,47 +32,7 @@ function App() {
         <div className="container">
           <h1 className="text-center">Habit List</h1>
           {/* <!-- form --> */}
-          <form
-            onsubmit="formSubmit(this)"
-            action="javascript:void(0)"
-            className="border p-5 rounded shadow-lg mt-5"
-          >
-            <div className="row">
-              <div className="col-md-7">
-                <input
-                  type="text"
-                  id="habits"
-                  className="form-control"
-                  placeholder="Habit"
-                  aria-label="First name"
-                  name="habit"
-                />
-              </div>
-              <div className="col-md-2">
-                <input
-                  id="hrs"
-                  type="number"
-                  className="form-control"
-                  placeholder="Hour"
-                  aria-label="Last name"
-                  name="hr"
-                  min="1"
-                />
-              </div>
-              <div className="col-md-3 d-flex gap-2">
-                <button type="submit" className="btn btn-primary">
-                  Add New Habit
-                </button>
-                <div
-                  type="clear"
-                  className="btn btn-primary"
-                  onclick="clearForm()"
-                >
-                  clear
-                </div>
-              </div>
-            </div>
-          </form>
+          <Form addTaskList={addTaskList} />
 
           {/* <!-- tables --> */}
           <div className="row mt-5">
