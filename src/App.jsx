@@ -5,9 +5,26 @@ import { Form } from "./components/Form";
 function App() {
   const [taskList, setTaskList] = useState([]);
   const addTaskList = (taskObj) => {
-    setTaskList([...taskList, taskObj]);
+    const obj = {
+      ...taskObj,
+      id: idGen(),
+      type: "entry",
+    };
+    setTaskList([...taskList, obj]);
   };
   console.log(taskList);
+  const idGen = (length = 6) => {
+    const str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXCVBNM123456789";
+
+    let id = "";
+
+    for (let i = 0; i < 6; i++) {
+      const index = Math.floor(Math.random() * str.length);
+      id += str[index];
+    }
+
+    return id;
+  };
   return (
     <>
       <div className="wrapper pt-5">
