@@ -1,7 +1,8 @@
 import React from "react";
 
 export const Tables = ({ taskList }) => {
-  let entryList = taskList.filter((item) => item.type === "entry");
+  const entryList = taskList.filter((item) => item.type === "entry");
+  const bList = taskList.filter((item) => item.type === "b");
   return (
     <div className="row mt-5">
       <div className="col-md text-center">
@@ -13,12 +14,12 @@ export const Tables = ({ taskList }) => {
             {entryList.map((item, i) => {
               return (
                 <tr key={item.id}>
-                  <td>${i + 1}</td>
-                  <td>${item.habit}</td>
-                  <td>${item.hr}</td>
+                  <td>{i + 1}</td>
+                  <td>{item.habit}</td>
+                  <td>{item.hr}</td>
                   <td class="text-end">
                     <button
-                      onclick="onDelete('${item.id}')"
+                      onClick="onDelete('${item.id}')"
                       class="btn btn-danger"
                     >
                       <i class="fa-solid fa-trash"></i>
@@ -41,7 +42,29 @@ export const Tables = ({ taskList }) => {
         <hr />
         {/* <!-- to improve habits tables --> */}
         <table className="table table-striped table-hover">
-          <tbody id="improveList"></tbody>
+          <tbody id="improveList">
+            {bList.map((item, i) => (
+              <tr key={item.id}>
+                <td>{i + 1}</td>
+                <td>{item.habit}</td>
+                <td>{item.hr}</td>
+                <td class="text-end">
+                  <button
+                    onClick="moveHabit('${item.id}','g')"
+                    class="btn btn-warning"
+                  >
+                    <i class="fa-solid fa-arrow-left"></i>
+                  </button>
+                  <button
+                    onClick="onDelete('${item.id}')"
+                    class="btn btn-danger"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
         <div className="alert alert-success">
           You could have saved <span id="svdHr">0</span> hours
