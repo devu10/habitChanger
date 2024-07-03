@@ -13,7 +13,18 @@ function App() {
     };
     setTaskList([...taskList, obj]);
   };
-  console.log(taskList);
+
+  const moveHabit = (id, type) => {
+    setTaskList(
+      habitList.map((item) => {
+        if (item.id === id) {
+          item.type = type;
+        }
+        return item;
+      })
+    );
+  };
+
   const idGen = (length = 6) => {
     const str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXCVBNM123456789";
 
