@@ -16,7 +16,7 @@ function App() {
 
   const moveHabit = (id, type) => {
     setTaskList(
-      habitList.map((item) => {
+      taskList.map((item) => {
         if (item.id === id) {
           item.type = type;
         }
@@ -47,7 +47,7 @@ function App() {
           <Form addTaskList={addTaskList} />
 
           {/* <!-- tables --> */}
-          <Tables taskList={taskList} />
+          <Tables taskList={taskList} moveHabit={moveHabit} />
           {/* <!-- displa --> */}
           <div className="alert alert-success">
             The total hours allocated =<span id="tlHr"> 0</span>
