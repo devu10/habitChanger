@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Tables = ({ taskList, moveHabit }) => {
+export const Tables = ({ taskList, moveHabit, onDelete }) => {
   const entryList = taskList.filter((item) => item.type === "entry");
   const bList = taskList.filter((item) => item.type === "b");
   return (
@@ -19,7 +19,7 @@ export const Tables = ({ taskList, moveHabit }) => {
                   <td>{item.hr}</td>
                   <td className="text-end">
                     <button
-                      onClick="onDelete('${item.id}')"
+                      onClick={() => onDelete(item.id)}
                       className="btn btn-danger"
                     >
                       <i className="fa-solid fa-trash"></i>
@@ -56,7 +56,7 @@ export const Tables = ({ taskList, moveHabit }) => {
                     <i className="fa-solid fa-arrow-left"></i>
                   </button>
                   <button
-                    onClick="onDelete('${item.id}')"
+                    onClick={() => onDelete(item.id)}
                     className="btn btn-danger"
                   >
                     <i className="fa-solid fa-trash"></i>

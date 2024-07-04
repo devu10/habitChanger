@@ -25,6 +25,12 @@ function App() {
     );
   };
 
+  const onDelete = (id) => {
+    if (window.confirm("Aye you sure to delte?")) {
+      setTaskList(taskList.filter((item) => item.id !== id));
+    }
+  };
+
   const idGen = (length = 6) => {
     const str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPSDFGHJKLZXCVBNM123456789";
 
@@ -47,7 +53,11 @@ function App() {
           <Form addTaskList={addTaskList} />
 
           {/* <!-- tables --> */}
-          <Tables taskList={taskList} moveHabit={moveHabit} />
+          <Tables
+            taskList={taskList}
+            moveHabit={moveHabit}
+            onDelete={onDelete}
+          />
           {/* <!-- displa --> */}
           <div className="alert alert-success">
             The total hours allocated =<span id="tlHr"> 0</span>
