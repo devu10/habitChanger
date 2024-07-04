@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Tables = ({ taskList }) => {
+export const Tables = ({ taskList, moveHabit }) => {
   const entryList = taskList.filter((item) => item.type === "entry");
   const bList = taskList.filter((item) => item.type === "b");
   return (
@@ -17,18 +17,18 @@ export const Tables = ({ taskList }) => {
                   <td>{i + 1}</td>
                   <td>{item.habit}</td>
                   <td>{item.hr}</td>
-                  <td class="text-end">
+                  <td className="text-end">
                     <button
                       onClick="onDelete('${item.id}')"
-                      class="btn btn-danger"
+                      className="btn btn-danger"
                     >
-                      <i class="fa-solid fa-trash"></i>
+                      <i className="fa-solid fa-trash"></i>
                     </button>
                     <button
-                      onClick="moveHabit('${item.id}','b')"
-                      class="btn btn-success"
+                      onClick={() => moveHabit(item.id, "b")}
+                      className="btn btn-success"
                     >
-                      <i class="fa-solid fa-arrow-right"></i>
+                      <i className="fa-solid fa-arrow-right"></i>
                     </button>
                   </td>
                 </tr>
@@ -48,18 +48,18 @@ export const Tables = ({ taskList }) => {
                 <td>{i + 1}</td>
                 <td>{item.habit}</td>
                 <td>{item.hr}</td>
-                <td class="text-end">
+                <td className="text-end">
                   <button
-                    onClick="moveHabit('${item.id}','g')"
-                    class="btn btn-warning"
+                    onClick={() => moveHabit(item.id, "entry")}
+                    className="btn btn-warning"
                   >
-                    <i class="fa-solid fa-arrow-left"></i>
+                    <i className="fa-solid fa-arrow-left"></i>
                   </button>
                   <button
                     onClick="onDelete('${item.id}')"
-                    class="btn btn-danger"
+                    className="btn btn-danger"
                   >
-                    <i class="fa-solid fa-trash"></i>
+                    <i className="fa-solid fa-trash"></i>
                   </button>
                 </td>
               </tr>
