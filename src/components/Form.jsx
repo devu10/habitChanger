@@ -8,7 +8,7 @@ export const Form = ({ addTaskList }) => {
 
     setForm({
       ...form,
-      [name]: value,
+      [name]: isNaN(value) ? value : Number(value),
     });
   };
 
