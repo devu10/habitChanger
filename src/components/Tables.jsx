@@ -3,6 +3,7 @@ import React from "react";
 export const Tables = ({ taskList, moveHabit, onDelete }) => {
   const entryList = taskList.filter((item) => item.type === "entry");
   const bList = taskList.filter((item) => item.type === "b");
+
   return (
     <div className="row mt-5">
       <div className="col-md text-center">
@@ -67,7 +68,13 @@ export const Tables = ({ taskList, moveHabit, onDelete }) => {
           </tbody>
         </table>
         <div className="alert alert-success">
-          You could have saved <span id="svdHr">0</span> hours
+          You could have saved{" "}
+          <span id="svdHr">
+            {bList.reduce((acc, item) => {
+              return acc + item.hr;
+            }, 0)}
+          </span>{" "}
+          hours
         </div>
       </div>
     </div>
