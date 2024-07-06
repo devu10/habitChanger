@@ -1,8 +1,8 @@
 import React from "react";
 
 export const Tables = ({ taskList, moveHabit, onDelete }) => {
-  const entryList = taskList.filter((item) => item.type === "entry" || []);
-  const bList = taskList.filter((item) => item.type === "b" || []);
+  const entryList = taskList.filter((item) => item.type === "entry");
+  const bList = taskList.filter((item) => item.type === "b");
 
   return (
     <div className="row mt-5">
